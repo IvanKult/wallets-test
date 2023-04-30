@@ -1,0 +1,56 @@
+﻿@page "/wallets"
+
+<PageTitle>Wallets</PageTitle>
+
+@using dto
+@using System.Threading
+@using Newtonsoft.Json
+@using Microsoft.Extensions.Options;
+@using site.Options
+@using System.Net.Http
+@inject IOptions<ApiOptions> ApiSettings
+
+<h1>Wallets</h1>
+
+
+@if (wallets == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Address</th>
+            <th>Balance</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var wallet in wallets)
+            {
+                <tr>
+                    <td>@wallet.Id</td>
+                    <td>@wallet.Address</td>
+                    <td>@wallet.Balance</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<WalletInfo> wallets;
+    private uint? page = null, pageSize = null;
+    private HttpClient _httpClient;
+    protected override async Task OnInitializedAsync()
+    {
+        _httpClient = new HttpClient();
+        _httpClient.BaseAddress = new Uri(ApiSettings.Value.Url);
+        var response = await _httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Get, "/wallets"));
+        var content = await response.Content.ReadAsStringAsync();
+        var parsed = JsonConvert.DeserializeObject<GetWalletsInfo.Response>(content);
+        wallets = parsed.Data;
+    }
+}

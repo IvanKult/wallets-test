@@ -30,4 +30,6 @@
 1. Клонировать репозиторий
 2. `docker-compose up -d`
 3. Создать в БД таблицу `Wallets` и заполнить её данными (`"ConnectionString": "User ID=dev;Password=dev;Server=localhost;Database=wallets-test;Pooling=true;MaxPoolSize=300"`)
-4. ...
+4. Запуск API (`dotnet run` в api)
+5. Запуск сайта (`dotnet run` в site)
+6. Запуск `http://localhost:5001`
