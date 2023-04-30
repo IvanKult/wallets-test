@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  db:
+      image: postgres:10.5-alpine
+      command:
+        - postgres
+        - -c
+        - max_connections=300
+      ports:
+        - 5432:5432
+      environment:
+        POSTGRES_DB: wallets-test
+        POSTGRES_USER: dev
+        POSTGRES_PASSWORD: dev
+  
