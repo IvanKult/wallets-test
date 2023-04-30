@@ -13,6 +13,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 builder.Services.AddDbContext<IDbContext, api.Services.DbContext>(options =>
                 options.UseNpgsql(builder.Configuration.GetSection("DbSettings").Get<DbOptions>().ConnectionString));
+
+builder.Services.Configure<Web3ProviderOptions>(builder.Configuration.GetSection("Infura"));
+builder.Services.AddSingleton<IWeb3Provider, InfuraWeb3Provider>();
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
