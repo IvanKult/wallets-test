@@ -29,5 +29,5 @@
 
 1. Клонировать репозиторий
 2. `docker-compose up -d`
-3. Создать в БД таблицу `Wallets` и заполнить её данными
+3. Создать в БД таблицу `Wallets` и заполнить её данными (`"ConnectionString": "User ID=dev;Password=dev;Server=localhost;Database=wallets-test;Pooling=true;MaxPoolSize=300"`)
 4. ...
