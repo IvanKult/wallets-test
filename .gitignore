@@ -1,4 +1,4 @@
 bin
 obj
 log
-api/appsettings.Development.json
+*/appsettings.Development.json
