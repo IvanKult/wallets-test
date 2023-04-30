@@ -3,7 +3,6 @@
 <PageTitle>Wallets</PageTitle>
 
 @using dto
-@using System.Threading
 @using Newtonsoft.Json
 @using Microsoft.Extensions.Options;
 @using site.Options
@@ -19,16 +18,20 @@
 }
 else
 {
+    <i>Actual for @block block</i>
+    <span class='arrow oi oi-reload' aria-hidden="true" @onclick='Refresh'></span>
     <table class="table">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Address</th>
-            <th>Balance</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var wallet in wallets)
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Address</th>
+                <th>Balance
+                    <span class='arrow oi oi-arrow-@(sortDesc?"bottom":"top")' aria-hidden="true" @onclick='Sort'></span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var wallet in wallets)
             {
                 <tr>
                     <td>@wallet.Id</td>
@@ -40,17 +43,36 @@ else
     </table>
 }
 
+<style>
+    span.oi {
+        cursor: pointer;
+    }
+</style>
+
 @code {
     private List<WalletInfo> wallets;
-    private uint? page = null, pageSize = null;
+    private long block;
+    private bool sortDesc = false;
     private HttpClient _httpClient;
     protected override async Task OnInitializedAsync()
     {
         _httpClient = new HttpClient();
         _httpClient.BaseAddress = new Uri(ApiSettings.Value.Url);
+        await Refresh();
+    }
+    private async Task Refresh()
+    {
         var response = await _httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Get, "/wallets"));
         var content = await response.Content.ReadAsStringAsync();
         var parsed = JsonConvert.DeserializeObject<GetWalletsInfo.Response>(content);
-        wallets = parsed.Data;
+        if (sortDesc) wallets = parsed.Data.OrderByDescending(x => x.Balance).ToList();
+        else wallets = parsed.Data.OrderBy(x => x.Balance).ToList();
+        block = parsed.BlockNumber;
+    }
+    private void Sort()
+    {
+        sortDesc = !sortDesc;
+        if (sortDesc) wallets = wallets.OrderByDescending(x => x.Balance).ToList();
+        else wallets = wallets.OrderBy(x => x.Balance).ToList();
     }
 }

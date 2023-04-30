@@ -17,5 +17,7 @@ public static class GetWalletsInfo
     {
         [JsonProperty("data")]
         public List<WalletInfo> Data { get; set; }
+        [JsonProperty("blockNumber")]
+        public long BlockNumber { get; set; }
     }
 }

@@ -30,6 +30,7 @@
 1. Клонировать репозиторий
 2. `docker-compose up -d`
 3. Создать в БД таблицу `Wallets` и заполнить её данными (`"ConnectionString": "User ID=dev;Password=dev;Server=localhost;Database=wallets-test;Pooling=true;MaxPoolSize=300"`)
-4. Запуск API (`dotnet run` в api)
-5. Запуск сайта (`dotnet run` в site)
-6. Запуск `http://localhost:5001`
+4. Прописать Infura ApiKey в api/appsettings.json 
+5. Запуск API (`dotnet run` в api)
+6. Запуск сайта (`dotnet run` в site)
+7. Открыть `http://localhost:5001` в браузере
